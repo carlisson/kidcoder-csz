@@ -1,0 +1,103 @@
+#area {
+  overflow: hidden;
+  width: 640px;
+  height: 420px;
+  border: 1px solid red;
+}
+#scenario {
+  display: block;
+  width: 400px;
+  border: 0px;
+  padding: 0px;
+  border-spacing: 0px;
+}
+#scenario td {
+  width: 40px;
+  height: 40px;
+}
+#talk {
+  display: none;
+  width: 630px;
+  height: 120px;
+  z-index: 10;
+  position: absolute;
+  top: 300px;
+  left: 15px;
+  background-color: #eff;
+  text-align: center;
+}
+.grass,
+.tree,
+.water,
+.street,
+.house {
+  background: url("../images/tileset.png") no-repeat;
+}
+.tree {
+  background-position: -40px 0px;
+}
+.water {
+  background-position: -80px 0px;
+}
+.street {
+  background-position: 0px -42px;
+}
+.house {
+  background-position: -40px -42px;
+}
+#hero {
+  z-index: 10;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background: url("../images/hero.png") no-repeat;
+  background-position: -40px -80px;
+  width: 40px;
+  height: 40px;
+}
+#hero.toleft {
+  background-position: -40px -120px;
+}
+#hero.toright {
+  background-position: -40px -40px;
+}
+#hero.toback {
+  background-position: -40px 0px;
+}
+
+.novel-scene {
+  position: absolute;
+  z-index: 20;
+  width: 640px;
+  height: 320px;
+  top: 100px;
+  background-color: antiquewhite;
+}
+
+.novel-person {
+  width: 200px;
+  height: 300px;
+  z-index: 22;
+  position: absolute;
+  top: 100px;
+  left: 40px;
+  background-repeat: no-repeat;
+  background-position: 0px 0px;
+}
+
+.novel-person .right {
+  left: 400px;
+}
+
+.novel-message {
+  width: 600px;
+  height: 100px;
+  position: absolute;
+  z-index: 25;
+  top: 200px;
+  background-color: white;
+  padding: 10px 20px;
+  text-align: center;
+  font-size: 16pt;
+  font-family: helvetica;
+}
