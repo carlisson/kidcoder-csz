@@ -20,3 +20,8 @@ ide: edit view
 
 view:
 	iceweasel -new-tab index.html
+
+gitup: clean
+	git commit -m "`zenity --entry --text='Digite a mensagem de commit.' --title='kidcoder-csz@github'`"
+	git remote add origin https://github.com/carlisson/kidcoder-csz.git
+	git push -u origin master
