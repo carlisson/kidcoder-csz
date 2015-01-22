@@ -17,8 +17,15 @@ scene = new Scenary [
 ] 
 hero = new Hero(scene)
 
+heroPerson = new NovelPerson("hero-photo", "red")
+
+novel = new NovelScene("mainnovel")
+novel.addPerson(heroPerson)
+
 $(document).ready ->
   scene.activate($("#area"))
   hero.activate($("#area"))
+  novel.activate($("#area"))
+  novel.write("Olá mundo")
   # Mapeamento de teclas para movimentações
   keyMonitor.pushState mapKeypress
