@@ -20,7 +20,7 @@ hero = new Hero(scene)
 heroPerson = new NovelPerson("hero-photo", "red")
 
 novel = new NovelScene("mainnovel")
-novel.addPerson(heroPerson)
+novel.addPerson("Azul", heroPerson)
 
 $(document).ready ->
   scene.activate($("#area"))

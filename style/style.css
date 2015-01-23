@@ -15,16 +15,6 @@
   width: 40px;
   height: 40px;
 }
-#talk {
-  width: 630px;
-  height: 120px;
-  z-index: 10;
-  position: absolute;
-  top: 300px;
-  left: 15px;
-  background-color: #eff;
-  text-align: center;
-}
 .grass,
 .tree,
 .water,
@@ -76,16 +66,15 @@
 .novel-person {
   width: 200px;
   height: 300px;
-  position: absolute;
-  top: 0px;
-  left: 0px;
+  margin: 0px 70px;
+  float: left;
   background-repeat: no-repeat;
   background-color: blue;
   background-position: 0px 0px;
 }
 
 .novel-person .right {
-  left: 400px;
+  float: right;
 }
 
 .novel-message {
@@ -94,7 +83,7 @@
   position: absolute;
   z-index: 25;
   top: 300px;
-  background-color: white;
+  background-color: #eff;
   padding: 10px 20px;
   text-align: center;
   font-size: 16pt;

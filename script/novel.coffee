@@ -19,20 +19,22 @@ class NovelScene extends Element
   constructor: (@id) ->
     super @id
     @dom.addClass "novel-scene"
-    @persons = []
+    @persons = {}
     @message = new Element(@id + "-message")
     @message.dom.addClass "novel-message"
-    # @message.hide()
+    @message.hide()
   activate: (mother) ->
     super mother
-    @message.activate(mother)
-    person.activate(@dom) for person in @persons
+    @message.activate mother
+    #person.activate @dom for person in @persons
+    for n, person of @persons
+      person.activate @dom
   addPerson: (name, p) ->
     @persons[name] = p
   talk: (name, humor, text) ->
-    @persons[name].show(humor)
+    @persons[name].show humor
   write: (t) ->
-    @message.text(t)
+    @message.dom.text t
     @message.show()
   choose: () ->
   desactivate: () ->
