@@ -22,10 +22,13 @@ heroPerson = new NovelPerson("hero-photo", "red")
 novel = new NovelScene("mainnovel")
 novel.addPerson("Azul", heroPerson)
 
+#mapHero = (k) ->
+#  hero.sceneKeypress(scene, k.key)
+
 $(document).ready ->
   scene.activate($("#area"))
   hero.activate($("#area"))
   novel.activate($("#area"))
-  novel.write("Olá mundo")
   # Mapeamento de teclas para movimentações
   keyMonitor.pushState mapKeypress
+  novel.write("Olá mundo")

@@ -36,6 +36,15 @@ class NovelScene extends Element
   write: (t) ->
     @message.dom.text t
     @message.show()
+    keyMonitor.pushState @mapKeypress
   choose: () ->
   desactivate: () ->
+  mapKeypress: (k) ->
+    if k.key in ['Enter', ' ']
+      console.log 'Sai'
+      novel.message.hide()
+      novel.persons[p].hide() for p in novel.persons
+      keyMonitor.popState()
+    else
+      console.log 'Espera'
 

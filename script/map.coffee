@@ -100,6 +100,13 @@ class Hero extends Element
   info: (msg) ->
     console.log "Hero: " + @pos + "; " + msg
 
+  sceneKeypress: (scenary, key) ->
+    switch key
+      when "Up" then @walk(scenary, 0, -1)
+      when "Down" then @walk(scenary, 0, 1)
+      when "Left" then @walk(scenary, -1, 0)
+      when "Right" then @walk(scenary, 1, 0)
+
 # Mapa navegável por personagens (no momento, somente o herói)
 class Scenary extends Element
   constructor: (@map) ->
@@ -122,15 +129,9 @@ class Scenary extends Element
     @right = @b_right * 40
 
 mapKeypress = (k) -> 
-    switch k.key
-      when "Up" then hero.walk(scene, 0, -1)
-      when "Down" then hero.walk(scene, 0, 1)
-      when "Left" then hero.walk(scene, -1, 0)
-      when "Right" then hero.walk(scene, 1, 0)
-      when " " then keyMonitor.pushState (k) ->
-        if k.key is "Esc"
-          keyMonitor.popState()
-        else
-          console.log "E o jogador pressionou " + k.key
-
-
+  console.log "Pressionou a tecla " + k.key
+  switch k.key
+    when "Up" then hero.walk(scene, 0, -1)
+    when "Down" then hero.walk(scene, 0, 1)
+    when "Left" then hero.walk(scene, -1, 0)
+    when "Right" then hero.walk(scene, 1, 0)

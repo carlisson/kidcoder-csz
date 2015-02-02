@@ -24,15 +24,16 @@ class Element
 class InternalKeyMonitor
   constructor: () ->
     @stack = []
-  toLast: () ->
-    $(document).unbind 'keypress'
-    $(document).on 'keypress', @stack[@stack.length - 1] if @stack.length > 0
   pushState: (f) ->
+    if @stack.length > 0
+      $(document).off 'keypress', @stack[@stack.length - 1]
     @stack.push(f)
-    @toLast()
+    $(document).on 'keypress', @stack[@stack.length - 1]
   popState: () ->
-    @stack.pop()
-    @toLast()
+    if @stack.length > 0
+      $(document).off 'keypress', @stack.pop()
+    if @stack.length > 0
+      $(document).on 'keypress', @stack[@stack.length - 1]
   clear: () ->
     @stack = []
 keyMonitor = new InternalKeyMonitor()
