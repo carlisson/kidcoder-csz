@@ -68,8 +68,8 @@
   height: 300px;
   margin: 0px 70px;
   float: left;
+  background-image: url(images/photo-anon.png);
   background-repeat: no-repeat;
-  background-color: blue;
   background-position: 0px 0px;
 }
 
