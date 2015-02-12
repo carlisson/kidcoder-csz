@@ -34,23 +34,23 @@
 .house {
   background-position: -40px -42px;
 }
-#hero {
+.mini-person {
   z-index: 10;
   position: absolute;
   top: 0px;
   left: 0px;
-  background: url("../images/hero-kim.png") no-repeat;
+  background: url("../images/hero.png") no-repeat;
   background-position: -40px -80px;
   width: 40px;
   height: 40px;
 }
-#hero.toleft {
+.mini-person.toleft {
   background-position: -40px -120px;
 }
-#hero.toright {
+.mini-person.toright {
   background-position: -40px -40px;
 }
-#hero.toback {
+.mini-person.toback {
   background-position: -40px 0px;
 }
 

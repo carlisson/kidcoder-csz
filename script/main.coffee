@@ -15,13 +15,14 @@ scene = new Scenary [
   'ggggggggggggwwwggwww',
   'gggggggggggwwwwgggww'
 ] 
-hero = new Hero scene
+hero = new Hero "hero", scene
+hero.setImage "images/hero-kim.png"
 
 heroPerson = new NovelPerson "hero-kim", "#b202d1"
-heroPerson.addImage "default", "url(images/photo-kim.png)"
+heroPerson.addImage "default", "images/photo-kim.png"
 
 npcPerson = new NovelPerson "npc-person", "#444"
-npcPerson.addImage "default", "url(images/photo-anon.png)"
+npcPerson.addImage "default", "images/photo-anon.png"
 
 novel = new NovelScene("mainnovel")
 novel.addPerson "kim", heroPerson

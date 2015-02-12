@@ -17,9 +17,13 @@ walkable = "sgh"
 # Representação do avatar. Futuramente, separar Person, que deverá ser usada
 # também para NPCs.
 class Hero extends Element
-  constructor: (@scenary) ->
+  constructor: (@id, @scenary) ->
+    super @id
+    @dom.addClass "mini-person"
     @pos = [0, 0]
-    @dom = $("<div/>", {id: "hero"})
+
+  setImage: (url) ->
+    @dom.css 'background-image', "url(" + url + ")"
 
   # Desloca o herói pelo cenário com base em (dx, dy), onde dx e dy podem
   # assumir valores -1, 0 ou 1.

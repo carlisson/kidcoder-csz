@@ -37,4 +37,3 @@ class InternalKeyMonitor
   clear: () ->
     @stack = []
 keyMonitor = new InternalKeyMonitor()
-

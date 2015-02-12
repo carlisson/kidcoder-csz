@@ -11,7 +11,7 @@ class NovelPerson extends Element
   addImage: (humor, image) ->
     @images[humor] = image
   show: (humor) ->
-    @dom.css 'background-image', @images[humor]
+    @dom.css 'background-image', "url(" + @images[humor] + ")"
     super()
 
 # Cena de novela, envolve diálogo entre personagens e possível interação do jogador através de decisões
