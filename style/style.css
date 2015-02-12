@@ -39,7 +39,7 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  background: url("../images/hero.png") no-repeat;
+  background: url("../images/hero-kim.png") no-repeat;
   background-position: -40px -80px;
   width: 40px;
   height: 40px;
@@ -60,7 +60,6 @@
   width: 640px;
   height: 320px;
   top: 100px;
-  background-color: antiquewhite;
 }
 
 .novel-person {
@@ -73,7 +72,7 @@
   background-position: 0px 0px;
 }
 
-.novel-person .right {
+.right {
   float: right;
 }
 

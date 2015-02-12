@@ -35,10 +35,23 @@ class NovelScene extends Element
   addPerson: (name, p) ->
     @persons[name] = p
   talk: (name, humor, text) ->
-      @events.push () =>
-        @persons[name].show humor
-        @write(text)
+    @events.push () =>
+      if @persons[name].dom.hasClass('right')
+        @persons[name].dom.removeClass('right')
+      @persons[name].show humor
+      @_write(text)
+  # Talk Right
+  tright: (name, humor, text) ->
+    @events.push () =>
+      console.log @persons[name].dom
+      if not @persons[name].dom.hasClass('right')
+        @persons[name].dom.addClass('right')
+      @persons[name].show humor
+      @_write(text)
   write: (t) ->
+    @events.push () =>
+      @_write(t)
+  _write: (t) ->
     @message.dom.text t
     @message.show()
     keyMonitor.pushState @mapKeypress
