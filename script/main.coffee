@@ -15,7 +15,7 @@ scene = new Scenary [
   'ggggggggggggwwwggwww',
   'gggggggggggwwwwgggww'
 ] 
-hero = new Hero "hero", scene
+hero = new Person "hero", scene
 hero.setImage "images/hero-kim.png"
 
 heroPerson = new NovelPerson "hero-kim", "#b202d1"
@@ -24,12 +24,9 @@ heroPerson.addImage "default", "images/photo-kim.png"
 npcPerson = new NovelPerson "npc-person", "#444"
 npcPerson.addImage "default", "images/photo-anon.png"
 
-novel = new NovelScene("mainnovel")
+novel = new NovelScene "mainnovel"
 novel.addPerson "kim", heroPerson
 novel.addPerson "npc", npcPerson
-
-#mapHero = (k) ->
-#  hero.sceneKeypress(scene, k.key)
 
 $(document).ready ->
   scene.activate $("#area")

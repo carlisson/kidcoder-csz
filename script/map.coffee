@@ -13,10 +13,8 @@ tileset = {
 # Lista de tiles por onde o herói pode caminhar
 walkable = "sgh"
 
-
-# Representação do avatar. Futuramente, separar Person, que deverá ser usada
-# também para NPCs.
-class Hero extends Element
+# Representação do avatar.
+class Person extends Element
   constructor: (@id, @scenary) ->
     super @id
     @dom.addClass "mini-person"
@@ -24,6 +22,42 @@ class Hero extends Element
 
   setImage: (url) ->
     @dom.css 'background-image', "url(" + url + ")"
+
+  left: (ok) ->
+    @dom.removeClass 'toright' if @dom.hasClass 'toright'
+    @dom.removeClass 'toback' if @dom.hasClass 'toback'
+    @dom.addClass 'toleft' if not @dom.hasClass 'toleft'
+    if ok
+      @pos[0] -= 1
+    else
+      console.log "Não pode ir mais para a esquerda que isso"
+
+  right: (ok) ->
+    @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
+    @dom.removeClass 'toback' if @dom.hasClass 'toback'
+    @dom.addClass 'toright' if not @dom.hasClass 'toright'
+    if ok
+      @pos[0] += 1
+    else
+      console.log "Não pode ir mais a direita que isso"
+
+  up: (ok) ->
+    @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
+    @dom.removeClass 'toright' if @dom.hasClass 'toright'
+    @dom.addClass 'toback' if not @dom.hasClass 'toback'
+    if ok
+      @pos[1] -= 1
+    else
+      console.log "Não pode subir mais que isso"
+
+  down: (ok) ->
+    @dom.removeClass 'toright' if @dom.hasClass 'toright'
+    @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
+    @dom.removeClass 'toback' if @dom.hasClass 'toback'
+    if ok
+      @pos[1] += 1
+    else
+      console.log "Não pode descer mai que isso"
 
   # Desloca o herói pelo cenário com base em (dx, dy), onde dx e dy podem
   # assumir valores -1, 0 ou 1.
@@ -38,65 +72,31 @@ class Hero extends Element
     @info("pp " + pseudopos + " " + ifix + " (" + dx + ", " + dy + ") bs " + b_screen + " sa " + screenarea)
     # Mover para a esquerda
     if dx is -1
-      @dom.removeClass 'toright' if @dom.hasClass 'toright'
-      @dom.removeClass 'toback' if @dom.hasClass 'toback'
-      @dom.addClass 'toleft' if not @dom.hasClass 'toleft'
-      if @pos[0] > 0
-        if walkable.indexOf(sc.map[@pos[1]][@pos[0]-1]) > -1
-          @pos[0] -= 1
-          # Essa fórmula é maluca, mas funciona. Quando o jogador move o herói do
-          # terceiro para o segundo quadrado na tela, a tela rola para a esquerda.
-          if @pos[0] - 2 < -ifix and not sc.left
-            sc.left = true
-            sc.slide(0, 0)
-            ifix = 0
-        else
-          console.log 'red'
-      else
-        console.log 'black'
+      ok = (@pos[0] > 0) and (walkable.indexOf(sc.map[@pos[1]][@pos[0]-1]) > -1)
+      @left(ok)
+      if (@pos[0] - 2 < -ifix) and not sc.left
+        sc.left = true
+        sc.slide(0, 0)
+        ifix = 0
 
     # Mover para a direita
     else if dx is 1
-      @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
-      @dom.removeClass 'toback' if @dom.hasClass 'toback'
-      @dom.addClass 'toright' if not @dom.hasClass 'toright'
-      if @pos[0] < sc.map[0].length
-        if walkable.indexOf(sc.map[@pos[1]][@pos[0]+1]) > -1
-          @pos[0] += 1
-          if pseudopos[0] > 8 and sc.left
-            sc.left = false
-            sc.slide(sc.right, 0)
-            ifix = sc.b_right
-        else
-          console.log 'red'
-      else
-        console.log 'black'
+      ok = (@pos[0] < sc.map[0].length) and (walkable.indexOf(sc.map[@pos[1]][@pos[0]+1]) > -1)
+      @right(ok)
+      if pseudopos[0] > 8 and sc.left
+        sc.left = false
+        sc.slide(sc.right, 0)
+        ifix = sc.b_right
 
     # Mover para cima
     else if dy is -1
-      @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
-      @dom.removeClass 'toright' if @dom.hasClass 'toright'
-      @dom.addClass 'toback' if not @dom.hasClass 'toback'
-      if pseudopos[1] > 0
-        if walkable.indexOf(sc.map[@pos[1] - 1][@pos[0]]) > -1
-          @pos[1] -= 1
-        else
-          console.log 'red'
-      else
-        console.log 'black'
+      ok = (pseudopos[1] > 0) and (walkable.indexOf(sc.map[@pos[1] - 1][@pos[0]]) > -1)
+      @up(ok)
 
     # Mover para baixo
     else if dy is 1
-      @dom.removeClass 'toright' if @dom.hasClass 'toright'
-      @dom.removeClass 'toleft' if @dom.hasClass 'toleft'
-      @dom.removeClass 'toback' if @dom.hasClass 'toback'
-      if 1 + pseudopos[1] < sc.map.length
-        if walkable.indexOf(sc.map[@pos[1] + 1][@pos[0]]) > -1
-          @pos[1] += 1
-        else
-          console.log 'red'
-      else
-        console.log 'black'
+      ok = (1 + pseudopos[1] < sc.map.length) and (walkable.indexOf(sc.map[@pos[1] + 1][@pos[0]]) > -1)
+      @down(ok)
 
     # Mover o herói de fato para as novas coordenadas
     @slide((@pos[0] + ifix)*40 + 10, @pos[1]*42 +10)
@@ -114,6 +114,8 @@ class Hero extends Element
 # Mapa navegável por personagens (no momento, somente o herói)
 class Scenary extends Element
   constructor: (@map) ->
+    @persons = {}
+    @events = {}
     @dom = $("<table />", {id: "scenario"})
     for l in @map
       line = $("<tr />")
@@ -122,6 +124,10 @@ class Scenary extends Element
         line.append(tile)
       @dom.append(line)
 
+  addPerson: (pk, p) ->
+    @persons[pk] = p
+  addEvent: (x, y, func) ->
+    @events[x + ':' + y] = func
   activate: (mother) ->
     super mother
     @pos = [0, 0]
@@ -131,6 +137,7 @@ class Scenary extends Element
     @left = true
     @b_right = b_screen[0] - @map[0].length
     @right = @b_right * 40
+  move: (p, dx, dy) ->
 
 mapKeypress = (k) -> 
   console.log "Pressionou a tecla " + k.key
