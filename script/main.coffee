@@ -15,9 +15,13 @@ scene = new Scenary [
   'ggggggggggggwwwggwww',
   'gggggggggggwwwwgggww'
 ] 
-hero = new Person "hero", scene
+hero = new Person "hero"
 hero.setImage "images/hero-kim.png"
-scene.addPerson "kim", hero
+scene.addPerson "kim", hero, [0, 0]
+
+anon = new Person "anon"
+anon.setImage "images/hero.png"
+scene.addPerson "Anon", anon, [7, 7]
 
 heroPerson = new NovelPerson "hero-kim", "#b202d1"
 heroPerson.addImage "default", "images/photo-kim.png"
@@ -39,7 +43,6 @@ mapKeypress = (k) ->
 
 $(document).ready ->
   scene.activate $("#area")
-  hero.activate $("#area")
   novel.activate $("#area")
   # Mapeamento de teclas para movimentações
   keyMonitor.pushState mapKeypress

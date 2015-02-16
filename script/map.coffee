@@ -5,6 +5,7 @@ tileset = {
   s: "street",
   g: "grass",
   t: "tree",
+  t: "tree",
   w: "water",
   h: "house",
   l: "wall"
@@ -15,7 +16,7 @@ walkable = "sgh"
 
 # Representação do avatar.
 class Person extends Element
-  constructor: (@id, @scenary) ->
+  constructor: (@id) ->
     super @id
     @dom.addClass "mini-person"
     @pos = [0, 0]
@@ -24,8 +25,11 @@ class Person extends Element
   setImage: (url) ->
     @dom.css 'background-image', "url(" + url + ")"
 
-  setEvent = (ev) ->
+  setEvent: (ev) ->
     @event = ev
+
+  doMove: (ifix) ->
+    @slide((@pos[0] + ifix)*40 + 10, @pos[1]*42 +10)
 
   left: (ok) ->
     @dom.removeClass 'toright' if @dom.hasClass 'toright'
@@ -83,8 +87,9 @@ class Scenary extends Element
     if prev
       delete @elements[prev[0] + ':' + prev[1]]
     @elements[pos[0] + ':' + pos[1]] = name
-  addPerson: (pk, p) ->
+  addPerson: (pk, p, pos) ->
     @persons[pk] = p
+    p.pos = pos
     @_updatePos pk, p.pos
   addEvent: (x, y, func) ->
     @elements[x + ':' + y] = func
@@ -97,6 +102,13 @@ class Scenary extends Element
     @left = true
     @b_right = b_screen[0] - @map[0].length
     @right = @b_right * 40
+    for p of @persons
+      @persons[p].activate mother
+      @persons[p].doMove @hDiff()
+
+  # Diferença horizontal, a usar nos cálculos de posicionamento
+  hDiff: () ->
+    if @left then 0 else @b_right
 
   # Funcionar em modo avatar (main=true) e modo NPC (main=false)
   move: (n, dx, dy, main = false) ->
@@ -105,7 +117,7 @@ class Scenary extends Element
     # deverão ser corrigidas em x.
     p = @persons[n]
     prev = p.pos
-    ifix = if @left then 0 else @b_right
+    ifix = @hDiff()
     # Coordenadas corrigidas, necessárias nas comparações para funcionar direito
     pseudopos = [p.pos[0] - ifix, p.pos[1]]
 
@@ -139,5 +151,5 @@ class Scenary extends Element
       p.down(ok)
 
     # Mover o herói de fato para as novas coordenadas
-    p.slide((p.pos[0] + ifix)*40 + 10, p.pos[1]*42 +10)
+    p.doMove(ifix)
     @_updatePos n, p.pos, prev
