@@ -17,6 +17,7 @@ scene = new Scenary [
 ] 
 hero = new Person "hero", scene
 hero.setImage "images/hero-kim.png"
+scene.addPerson "kim", hero
 
 heroPerson = new NovelPerson "hero-kim", "#b202d1"
 heroPerson.addImage "default", "images/photo-kim.png"
@@ -27,6 +28,14 @@ npcPerson.addImage "default", "images/photo-anon.png"
 novel = new NovelScene "mainnovel"
 novel.addPerson "kim", heroPerson
 novel.addPerson "npc", npcPerson
+
+mapKeypress = (k) ->
+  console.log "Apertou a tecla " + k.key
+  switch k.key
+    when "Up" then scene.move "kim", 0, -1, true
+    when "Down" then scene.move "kim", 0, 1, true
+    when "Left" then scene.move "kim", -1, 0, true
+    when "Right" then scene.move "kim", 1, 0, true
 
 $(document).ready ->
   scene.activate $("#area")

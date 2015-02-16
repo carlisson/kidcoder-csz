@@ -19,9 +19,13 @@ class Person extends Element
     super @id
     @dom.addClass "mini-person"
     @pos = [0, 0]
+    @event = false
 
   setImage: (url) ->
     @dom.css 'background-image', "url(" + url + ")"
+
+  setEvent = (ev) ->
+    @event = ev
 
   left: (ok) ->
     @dom.removeClass 'toright' if @dom.hasClass 'toright'
@@ -59,63 +63,14 @@ class Person extends Element
     else
       console.log "Não pode descer mai que isso"
 
-  # Desloca o herói pelo cenário com base em (dx, dy), onde dx e dy podem
-  # assumir valores -1, 0 ou 1.
-  walk: (sc, dx, dy) ->
-    # O cenário neste momento tem apenas 2 estados: colado à direita e colado à
-    # esquerda. Se estiver colado à direita, as coordenadas do herói
-    # deverão ser corrigidas em x.
-    ifix = if sc.left then 0  else sc.b_right
-    # Coordenadas corrigidas, necessárias nas comparações para funcionar direito
-    pseudopos = [@pos[0] - ifix, @pos[1]]
-
-    @info("pp " + pseudopos + " " + ifix + " (" + dx + ", " + dy + ") bs " + b_screen + " sa " + screenarea)
-    # Mover para a esquerda
-    if dx is -1
-      ok = (@pos[0] > 0) and (walkable.indexOf(sc.map[@pos[1]][@pos[0]-1]) > -1)
-      @left(ok)
-      if (@pos[0] - 2 < -ifix) and not sc.left
-        sc.left = true
-        sc.slide(0, 0)
-        ifix = 0
-
-    # Mover para a direita
-    else if dx is 1
-      ok = (@pos[0] < sc.map[0].length) and (walkable.indexOf(sc.map[@pos[1]][@pos[0]+1]) > -1)
-      @right(ok)
-      if pseudopos[0] > 8 and sc.left
-        sc.left = false
-        sc.slide(sc.right, 0)
-        ifix = sc.b_right
-
-    # Mover para cima
-    else if dy is -1
-      ok = (pseudopos[1] > 0) and (walkable.indexOf(sc.map[@pos[1] - 1][@pos[0]]) > -1)
-      @up(ok)
-
-    # Mover para baixo
-    else if dy is 1
-      ok = (1 + pseudopos[1] < sc.map.length) and (walkable.indexOf(sc.map[@pos[1] + 1][@pos[0]]) > -1)
-      @down(ok)
-
-    # Mover o herói de fato para as novas coordenadas
-    @slide((@pos[0] + ifix)*40 + 10, @pos[1]*42 +10)
-
   info: (msg) ->
     console.log "Hero: " + @pos + "; " + msg
-
-  sceneKeypress: (scenary, key) ->
-    switch key
-      when "Up" then @walk(scenary, 0, -1)
-      when "Down" then @walk(scenary, 0, 1)
-      when "Left" then @walk(scenary, -1, 0)
-      when "Right" then @walk(scenary, 1, 0)
 
 # Mapa navegável por personagens (no momento, somente o herói)
 class Scenary extends Element
   constructor: (@map) ->
     @persons = {}
-    @events = {}
+    @elements = {}
     @dom = $("<table />", {id: "scenario"})
     for l in @map
       line = $("<tr />")
@@ -124,10 +79,15 @@ class Scenary extends Element
         line.append(tile)
       @dom.append(line)
 
+  _updatePos: (name, pos, prev = false) ->
+    if prev
+      delete @elements[prev[0] + ':' + prev[1]]
+    @elements[pos[0] + ':' + pos[1]] = name
   addPerson: (pk, p) ->
     @persons[pk] = p
+    @_updatePos pk, p.pos
   addEvent: (x, y, func) ->
-    @events[x + ':' + y] = func
+    @elements[x + ':' + y] = func
   activate: (mother) ->
     super mother
     @pos = [0, 0]
@@ -137,12 +97,47 @@ class Scenary extends Element
     @left = true
     @b_right = b_screen[0] - @map[0].length
     @right = @b_right * 40
-  move: (p, dx, dy) ->
 
-mapKeypress = (k) -> 
-  console.log "Pressionou a tecla " + k.key
-  switch k.key
-    when "Up" then hero.walk(scene, 0, -1)
-    when "Down" then hero.walk(scene, 0, 1)
-    when "Left" then hero.walk(scene, -1, 0)
-    when "Right" then hero.walk(scene, 1, 0)
+  # Funcionar em modo avatar (main=true) e modo NPC (main=false)
+  move: (n, dx, dy, main = false) ->
+    # O cenário neste momento tem apenas 2 estados: colado à direita e colado à
+    # esquerda. Se estiver colado à direita, as coordenadas do herói
+    # deverão ser corrigidas em x.
+    p = @persons[n]
+    prev = p.pos
+    ifix = if @left then 0 else @b_right
+    # Coordenadas corrigidas, necessárias nas comparações para funcionar direito
+    pseudopos = [p.pos[0] - ifix, p.pos[1]]
+
+    p.info("pp " + pseudopos + " " + ifix + " (" + dx + ", " + dy + ") bs " + b_screen + " sa " + screenarea)
+    # Mover para a esquerda
+    if dx is -1
+      ok = (p.pos[0] > 0) and (walkable.indexOf(@map[p.pos[1]][p.pos[0]-1]) > -1)
+      p.left(ok)
+      if (p.pos[0] - 2 < -ifix) and not @left
+        @left = true
+        @slide(0, 0)
+        ifix = 0
+
+    # Mover para a direita
+    else if dx is 1
+      ok = (p.pos[0] < @map[0].length) and (walkable.indexOf(@map[p.pos[1]][p.pos[0]+1]) > -1)
+      p.right(ok)
+      if pseudopos[0] > 8 and @left
+        @left = false
+        @slide(@right, 0)
+        ifix = @b_right
+
+    # Mover para cima
+    else if dy is -1
+      ok = (pseudopos[1] > 0) and (walkable.indexOf(@map[p.pos[1] - 1][p.pos[0]]) > -1)
+      p.up(ok)
+
+    # Mover para baixo
+    else if dy is 1
+      ok = (1 + pseudopos[1] < @map.length) and (walkable.indexOf(@map[p.pos[1] + 1][p.pos[0]]) > -1)
+      p.down(ok)
+
+    # Mover o herói de fato para as novas coordenadas
+    p.slide((p.pos[0] + ifix)*40 + 10, p.pos[1]*42 +10)
+    @_updatePos n, p.pos, prev
