@@ -110,6 +110,12 @@ class Scenary extends Element
   hDiff: () ->
     if @left then 0 else @b_right
 
+  activatePos: (x, y) ->
+    x_exst = 0 <= x < @map[0].length
+    y_exst = 0 <= y < @map.length
+    collis = walkable.indexOf(@map[y][x]) > -1
+    return x_exst and y_exst and collis
+
   # Funcionar em modo avatar (main=true) e modo NPC (main=false)
   move: (n, dx, dy, main = false) ->
     # O cenário neste momento tem apenas 2 estados: colado à direita e colado à
@@ -122,9 +128,11 @@ class Scenary extends Element
     pseudopos = [p.pos[0] - ifix, p.pos[1]]
 
     p.info("pp " + pseudopos + " " + ifix + " (" + dx + ", " + dy + ") bs " + b_screen + " sa " + screenarea)
+
+    ok = @activatePos(p.pos[0] + dx, p.pos[1] + dy)
+
     # Mover para a esquerda
     if dx is -1
-      ok = (p.pos[0] > 0) and (walkable.indexOf(@map[p.pos[1]][p.pos[0]-1]) > -1)
       p.left(ok)
       if (p.pos[0] - 2 < -ifix) and not @left
         @left = true
@@ -133,7 +141,6 @@ class Scenary extends Element
 
     # Mover para a direita
     else if dx is 1
-      ok = (p.pos[0] < @map[0].length) and (walkable.indexOf(@map[p.pos[1]][p.pos[0]+1]) > -1)
       p.right(ok)
       if pseudopos[0] > 8 and @left
         @left = false
@@ -142,12 +149,10 @@ class Scenary extends Element
 
     # Mover para cima
     else if dy is -1
-      ok = (pseudopos[1] > 0) and (walkable.indexOf(@map[p.pos[1] - 1][p.pos[0]]) > -1)
       p.up(ok)
 
     # Mover para baixo
     else if dy is 1
-      ok = (1 + pseudopos[1] < @map.length) and (walkable.indexOf(@map[p.pos[1] + 1][p.pos[0]]) > -1)
       p.down(ok)
 
     # Mover o herói de fato para as novas coordenadas
