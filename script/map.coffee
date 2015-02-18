@@ -84,7 +84,9 @@ class Scenary extends Element
       @dom.append(line)
 
   _updatePos: (name, pos, prev = false) ->
+    console.log "Mudando de " + prev + " para " + pos
     if prev
+      console.log "Removendo prev"
       delete @elements[prev[0] + ':' + prev[1]]
     @elements[pos[0] + ':' + pos[1]] = name
   addPerson: (pk, p, pos) ->
@@ -113,8 +115,23 @@ class Scenary extends Element
   activatePos: (x, y) ->
     x_exst = 0 <= x < @map[0].length
     y_exst = 0 <= y < @map.length
-    collis = walkable.indexOf(@map[y][x]) > -1
-    return x_exst and y_exst and collis
+    if x_exst and y_exst
+      gdplane = walkable.indexOf(@map[y][x]) > -1
+      ind = x + ':' + y
+      console.log @elements
+      console.log 'Kim: ' + @persons['kim'].pos
+      console.log 'Target: ' + ind
+      if @elements[ind]
+        elems = true
+        console.log "Havia algo na posição " + ind
+        if @elements[ind].call
+          @elements[ind].call()
+          console.log "...e era uma função"
+      else
+        elems = false
+      return gdplane and not elems
+    else
+      return false
 
   # Funcionar em modo avatar (main=true) e modo NPC (main=false)
   move: (n, dx, dy, main = false) ->
@@ -122,7 +139,7 @@ class Scenary extends Element
     # esquerda. Se estiver colado à direita, as coordenadas do herói
     # deverão ser corrigidas em x.
     p = @persons[n]
-    prev = p.pos
+    prev = p.pos.slice()
     ifix = @hDiff()
     # Coordenadas corrigidas, necessárias nas comparações para funcionar direito
     pseudopos = [p.pos[0] - ifix, p.pos[1]]
