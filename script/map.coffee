@@ -173,5 +173,9 @@ class Scenary extends Element
       p.down(ok)
 
     # Mover o herói de fato para as novas coordenadas
-    p.doMove(ifix)
-    @_updatePos n, p.pos, prev
+    for k of @persons
+      @persons[k].doMove(ifix)
+      if k is n
+        @_updatePos n, p.pos, prev
+      else
+        @_updatePos k, @persons[k].pos
