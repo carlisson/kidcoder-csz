@@ -42,6 +42,10 @@ mapKeypress = (k) ->
     when "Right" then scene.move "kim", 1, 0, true
 
 $(document).ready ->
+  scene.addEvent 6, 6, () ->
+    novel.turnOn()
+    novel.write "Chegou aqui."
+    novel.run "Fala", "Jogo"
   scene.activate $("#area")
   novel.activate $("#area")
   # Mapeamento de teclas para movimentações

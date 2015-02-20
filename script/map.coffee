@@ -87,8 +87,12 @@ class Scenary extends Element
     console.log "Mudando de " + prev + " para " + pos
     if prev
       console.log "Removendo prev"
-      delete @elements[prev[0] + ':' + prev[1]]
-    @elements[pos[0] + ':' + pos[1]] = name
+      k = prev[0] + ':' + prev[1]
+      if not @elements[k].call
+        delete @elements[k]
+      else
+        return
+      @elements[pos[0] + ':' + pos[1]] = name
   addPerson: (pk, p, pos) ->
     @persons[pk] = p
     p.pos = pos
@@ -122,11 +126,13 @@ class Scenary extends Element
       console.log 'Kim: ' + @persons['kim'].pos
       console.log 'Target: ' + ind
       if @elements[ind]
-        elems = true
         console.log "Havia algo na posição " + ind
         if @elements[ind].call
           @elements[ind].call()
           console.log "...e era uma função"
+          elems = false
+        else
+          elems = true
       else
         elems = false
       return gdplane and not elems
