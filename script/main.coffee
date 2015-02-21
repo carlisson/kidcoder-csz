@@ -33,6 +33,8 @@ novel = new NovelScene "mainnovel"
 novel.addPerson "kim", heroPerson
 novel.addPerson "npc", npcPerson
 
+cabine = new Cabin 'editor'
+
 mapKeypress = (k) ->
   console.log "Apertou a tecla " + k.key
   switch k.key
@@ -40,6 +42,7 @@ mapKeypress = (k) ->
     when "Down" then scene.move "kim", 0, 1, true
     when "Left" then scene.move "kim", -1, 0, true
     when "Right" then scene.move "kim", 1, 0, true
+    when "Esc" then cabine.run()
 
 $(document).ready ->
   scene.addEvent 6, 6, () ->
@@ -48,6 +51,7 @@ $(document).ready ->
     novel.run "Fala", "Jogo"
   scene.activate $("#area")
   novel.activate $("#area")
+  cabine.activate $("#area")
   # Mapeamento de teclas para movimentações
   keyMonitor.pushState mapKeypress
   novel.turnOn()

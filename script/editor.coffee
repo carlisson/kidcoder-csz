@@ -1,7 +1,7 @@
 # Copiado de novel, falta adaptar, criar os estilos, etc
 # Passo 2: criar classe editor, que será extendida para Cabin, MemEditor (editor para salvar comportamentos nos slots) e Puzzle
 
-# Editor de código em tempo real
+# Editor de código em tempo real.
 class Cabin extends Element
   constructor: (@id) ->
     super @id
@@ -33,22 +33,14 @@ class Cabin extends Element
   run: (actual, next) ->
     @session = actual
     @next = next
-    @_run()
-  _run: () ->
-    if @events.length > 0
-      console.log "Rodando a primeira função"
-      @events[0].call()
-    else
+    @turnOn()
+    keyMonitor.pushState @mapKeypress
+  mapKeypress: (k) =>
+    if k.key in ['Esc']
+      console.log 'Sai'
+      keyMonitor.popState()
       @turnOff()
       @session = @next
-  mapKeypress: (k) =>
-    if k.key in ['Enter', ' ']
-      console.log 'Sai'
-      @message.hide()
-      @persons[p].hide() for p of @persons
-      keyMonitor.popState()
-      @events.shift()
-      @_run()
     else
       console.log 'Espera'
 

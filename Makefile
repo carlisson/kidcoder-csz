@@ -2,7 +2,7 @@ CC=coffee
 CFLAGS=-c
 LDFLAGS=
 CPATH=script
-SOURCES=$(CPATH)/support.coffee $(CPATH)/person.coffee $(CPATH)/map.coffee $(CPATH)/novel.coffee $(CPATH)/main.coffee
+SOURCES=$(CPATH)/support.coffee $(CPATH)/person.coffee $(CPATH)/map.coffee $(CPATH)/novel.coffee $(CPATH)/editor.coffee $(CPATH)/main.coffee
 
 all: $(CPATH)/main.js
 	
