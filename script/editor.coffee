@@ -1,8 +1,8 @@
 # Copiado de novel, falta adaptar, criar os estilos, etc
 # Passo 2: criar classe editor, que será extendida para Cabin, MemEditor (editor para salvar comportamentos nos slots) e Puzzle
 
-# Editor de código em tempo real.
-class Cabin extends Element
+# Cenas que utilizam a PowerArm.
+class PAScene extends Element
   constructor: (@id) ->
     super @id
     @dom.addClass "cabin-session"
@@ -19,6 +19,7 @@ class Cabin extends Element
     @arena.dom.addClass "cabin-arena"
     @arena.hide()
     @session = false
+    @next = false
   activate: (mother) ->
     super mother
     @shell.activate mother
@@ -52,3 +53,37 @@ class Cabin extends Element
     else
       console.log 'Espera'
 
+
+# Editor de código para Puzzle
+class PuzzleScene extends PAScene
+  constructor: (@id) ->
+    super @id
+    @states = []
+    @actual = 0
+  addState: (s) ->
+    @states.push s
+  setState: (i) ->
+    @actual = i
+  updateState: () ->
+    @arena.dom.css 'background-image', "url(" + @states[@actual] + ")"
+  run: (actual, next, st = 0) ->
+    super actual, next
+    @setState st
+    @updateState()
+  mapKeypress: (k) =>
+    if k.key in ['Esc']
+      @actual += 1;
+      if @actual < @states.length
+        @updateState()
+      else
+        @actual = 0
+        keyMonitor.popState()
+        @turnOff()
+        @session = @next
+    else
+      console.log 'Espera'
+
+# Editor de código em tempo real para combate
+class CabinScene extends PAScene
+  constructor: (@id) ->
+    super @id

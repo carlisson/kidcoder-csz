@@ -33,7 +33,9 @@ novel = new NovelScene "mainnovel"
 novel.addPerson "kim", heroPerson
 novel.addPerson "npc", npcPerson
 
-cabine = new Cabin 'editor'
+cabine = new PuzzleScene 'fase1'
+cabine.addState 'images/snake-off.png'
+cabine.addState 'images/snake-on.png'
 
 mapKeypress = (k) ->
   console.log "Apertou a tecla " + k.key
@@ -42,7 +44,7 @@ mapKeypress = (k) ->
     when "Down" then scene.move "kim", 0, 1, true
     when "Left" then scene.move "kim", -1, 0, true
     when "Right" then scene.move "kim", 1, 0, true
-    when "Esc" then cabine.run()
+    when "Esc" then cabine.run 'Snake', 'Jogo'
 
 $(document).ready ->
   scene.addEvent 6, 6, () ->
