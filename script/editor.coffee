@@ -28,7 +28,15 @@ class Cabin extends Element
     @hide()
   turnOn: () ->
     @show()
+    @shell.show()
+    @help.show()
+    @commarea.show()
+    @arena.show()
   turnOff: () ->
+    @shell.hide()
+    @help.hide()
+    @commarea.hide()
+    @arena.hide()
     @hide()
   run: (actual, next) ->
     @session = actual
