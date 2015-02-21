@@ -9,6 +9,15 @@ class PAScene extends Element
     @shell = new Element(@id + "-cshell")
     @shell.dom.addClass "cabin-shell"
     @shell.hide()
+    @history = $ "<ul/>", {id: @id + "-cshistory"}
+    @history.addClass "cabin-shell-history"
+    @history.hide()
+    @input = $ "<input/>", {id: @id + "-csinput"}
+    @input.addClass "cabin-shell-input"
+    @input.hide()
+    @input.on 'keypress', (k) =>
+      if k.key is 'Enter'
+        @eval()
     @help = new Element(@id + "-chelp")
     @help.dom.addClass "cabin-help"
     @help.hide()
@@ -23,22 +32,35 @@ class PAScene extends Element
   activate: (mother) ->
     super mother
     @shell.activate mother
+    mother.append @history
+    mother.append @input
     @help.activate mother
     @commarea.activate mother
     @arena.activate mother
     @hide()
+  eval: () ->
+    li = $ '<li/>'
+    li.append @input.val()
+    @history.append li
+    @input.val ''
   turnOn: () ->
     @show()
     @shell.show()
+    @history.show()
+    @input.show()
     @help.show()
     @commarea.show()
     @arena.show()
   turnOff: () ->
     @shell.hide()
+    @history.hide()
+    @input.hide()
     @help.hide()
     @commarea.hide()
     @arena.hide()
     @hide()
+  clear: () ->
+    @shell.val ''
   run: (actual, next) ->
     @session = actual
     @next = next
@@ -70,6 +92,7 @@ class PuzzleScene extends PAScene
     super actual, next
     @setState st
     @updateState()
+    @input.focus()
   mapKeypress: (k) =>
     if k.key in ['Esc']
       @actual += 1;
