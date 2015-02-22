@@ -5,6 +5,7 @@
 class PAScene extends Element
   constructor: (@id) ->
     super @id
+    @engine = new LangEngine()
     @dom.addClass "cabin-session"
     @shell = new Element(@id + "-cshell")
     @shell.dom.addClass "cabin-shell"
@@ -42,6 +43,7 @@ class PAScene extends Element
     li = $ '<li/>'
     li.append @input.val()
     @history.append li
+    @engine.exec @input.val()
     @input.val ''
   turnOn: () ->
     @show()
