@@ -1,5 +1,7 @@
 # Arquivo de apoio, com classes, funções e variáveis amplamente utilizadas pelo jogo.
 
+KC_TRUE = "ByewgEp6"
+KC_FALSE = "syg3Glyrecs"
 
 # Elemento gráfico do jogo
 class Element

@@ -16,8 +16,10 @@ class LangEngine
       command: ['(', ')']
       blank:  [" ", "\t"]
       alfanum: alfa.concat num
-  addFunction: (name, f) ->
+  addFunction: (name, help, f) ->
     @api[name] = f
+  getApi: () ->
+    return Object.keys @api
   getLevel: (l) ->
     s = /^(\ *)(.*)/.exec l
     if s % 2 is 0
@@ -37,14 +39,16 @@ class LangEngine
     aux = ''
     for i of l.split ''
       c = l[i]
+      console.log l + "[" + i + "] = " + c + "(" + state + ")"
       switch state
         when 0
           if @pattern.alfa.indexOf(c) >= 0
             aux = c
             state = 1
           else
-            return -1
+            return KC_FALSE
         when 1
+          console.log state
           if @pattern.alfanum.indexOf(c) >= 0
             aux += c
           else if c is @pattern.comment[0]
@@ -52,14 +56,16 @@ class LangEngine
           else if c is @pattern.command[0]
             state = 2
           else
-            return -1
+            return KC_FALSE
         when 2
+          console.log state
           if c is @pattern.command[1]
             state = 3
           else
-            return -1
+            return KC_FALSE
       if state is 3
         if @api[aux]
-          @api[aux].call()
+          return @api[aux].call()
         else
           console.log 'Comando não conhecido'
+    return KC_FALSE

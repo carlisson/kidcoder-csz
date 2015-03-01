@@ -22,8 +22,8 @@ class PAScene extends Element
     @help = new Element(@id + "-chelp")
     @help.dom.addClass "cabin-help"
     @help.hide()
-    @commarea = new Element(@id + "-ccomm")
-    @commarea.dom.addClass "cabin-comm"
+    @commarea = $ "<ul/>", {id: @id + "-ccomm"}
+    @commarea.addClass "cabin-comm"
     @commarea.hide()
     @arena = new Element(@id + "-carena")
     @arena.dom.addClass "cabin-arena"
@@ -36,14 +36,28 @@ class PAScene extends Element
     mother.append @history
     mother.append @input
     @help.activate mother
-    @commarea.activate mother
+    mother.append @commarea
     @arena.activate mother
+    ea = @engine.getApi()
+    for f of ea
+      fl = $ "<li/>", {'class': "help-function"}
+      fl.append ea[f]
+      @commarea.append fl
     @hide()
-  eval: () ->
+  echo: (msg) ->
     li = $ '<li/>'
-    li.append @input.val()
+    li.append msg
     @history.append li
-    @engine.exec @input.val()
+  eval: () ->
+    @echo @input.val()
+    exe = @engine.exec @input.val()
+    switch exe
+      when KC_FALSE
+        @echo "Comando desconhecido"
+      when KC_TRUE
+        console.log "Comando bem-sucedido"
+      else
+        @echo exe
     @input.val ''
   turnOn: () ->
     @show()
@@ -84,6 +98,10 @@ class PuzzleScene extends PAScene
     super @id
     @states = []
     @actual = 0
+    @engine.addFunction "date", "Imprime a data atual", () =>
+      aux = new Date()
+      @echo aux.toGMTString()
+      return KC_TRUE
   addState: (s) ->
     @states.push s
   setState: (i) ->
