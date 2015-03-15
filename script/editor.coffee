@@ -5,6 +5,7 @@
 class PAScene extends Element
   constructor: (@id) ->
     super @id
+    @msg_counter = 0
     @engine = new LangEngine()
     @dom.addClass "cabin-session"
     @shell = new Element(@id + "-cshell")
@@ -48,6 +49,7 @@ class PAScene extends Element
     li = $ '<li/>'
     li.append msg
     @history.append li
+    @history.scrollTop = @history.scrollTopMax
   eval: () ->
     @echo @input.val()
     exe = @engine.exec @input.val()
