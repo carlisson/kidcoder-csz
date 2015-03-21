@@ -12,8 +12,11 @@ class LangEngine
       logic: ['&&', '||', '(', ')', '!']
       comment: ['#']
       text: ['"', "'"]
-      attrib: ['=', '+=', '-=', '*=', '/=', '%=']
+      attrib: ['='] #, '+=', '-=', '*=', '/=', '%=']
       command: ['(', ')']
+      internal:
+        'if': [':', 'then', 'else']
+        'for': [':', 'in']
       blank:  [" ", "\t"]
       alfanum: alfa.concat num
   addFunction: (name, help, f) ->
@@ -35,11 +38,14 @@ class LangEngine
     # 2 - recebe abre-parêntese, chamada de função
     # 3 - recebe fecha-parêntese, fim de comando bem-sucedido
     # 4 - comentário
+    # 5 - epaço após alfa. Ou palavra reservada ou atribuição
+    # 6 - recebe atribuição
     state = 0
     aux = ''
     for i of l.split ''
       c = l[i]
       console.log l + "[" + i + "] = " + c + "(" + state + ")"
+      ikeys = Object.keys @pattern.internal
       switch state
         when 0
           if @pattern.alfa.indexOf(c) >= 0
@@ -55,6 +61,14 @@ class LangEngine
             state = 4
           else if c is @pattern.command[0]
             state = 2
+          else if @pattern.blank.indexOf(c) >= 0
+            if ikeys.indexOf(aux) > -1
+              console.log 'Palavra reservada ' + aux
+              return KC_FALSE
+            else
+              state = 5
+          else if c is @pattern.attrib[0]
+            state = 6
           else
             return KC_FALSE
         when 2
