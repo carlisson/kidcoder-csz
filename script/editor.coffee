@@ -51,7 +51,7 @@ class PAScene extends Element
     @history.append li
     @history.scrollTop = @history.scrollTopMax
   eval: () ->
-    @echo @input.val()
+    @echo '# ' + @input.val()
     exe = @engine.exec @input.val()
     switch exe
       when KC_FALSE

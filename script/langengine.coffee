@@ -41,7 +41,8 @@ class LangEngine
     # 5 - epaço após alfa. Ou palavra reservada ou atribuição
     # 6 - recebe atribuição
     state = 0
-    aux = ''
+    iau = 0
+    aux = []
     for i of l.split ''
       c = l[i]
       console.log l + "[" + i + "] = " + c + "(" + state + ")"
@@ -49,22 +50,23 @@ class LangEngine
       switch state
         when 0
           if @pattern.alfa.indexOf(c) >= 0
-            aux = c
+            aux[iau] = c
             state = 1
           else
             return KC_FALSE
         when 1
           console.log state
           if @pattern.alfanum.indexOf(c) >= 0
-            aux += c
+            aux[iau] += c
           else if c is @pattern.comment[0]
             state = 4
           else if c is @pattern.command[0]
             state = 2
           else if @pattern.blank.indexOf(c) >= 0
-            if ikeys.indexOf(aux) > -1
-              console.log 'Palavra reservada ' + aux
-              return KC_FALSE
+            if ikeys.indexOf(aux[iau]) > -1
+              return 'Ainda não sei o que fazer com ' + aux[iau]
+              iau += 1
+              aux[iau] = ''
             else
               state = 5
           else if c is @pattern.attrib[0]
@@ -77,9 +79,12 @@ class LangEngine
             state = 3
           else
             return KC_FALSE
+        when 5
+          if c is @pattern.attrib[0]
+            state = 6
       if state is 3
-        if @api[aux]
-          return @api[aux].call()
+        if @api[aux[0]]
+          return @api[aux[0]].call()
         else
           console.log 'Comando não conhecido'
     return KC_FALSE
