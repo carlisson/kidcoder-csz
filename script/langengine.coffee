@@ -40,6 +40,8 @@ class LangEngine
     # 4 - comentário
     # 5 - epaço após alfa. Ou palavra reservada ou atribuição
     # 6 - recebe atribuição
+    # 7 - recebe número como parâmetro de função
+    # 8 - espera pelo fecha-parêntese, não aceitando mais parâmetro
     state = 0
     iau = 0
     aux = []
@@ -61,9 +63,11 @@ class LangEngine
           else if c is @pattern.comment[0]
             state = 4
           else if c is @pattern.command[0]
+            iau += 1
+            aux[iau] = ''
             state = 2
           else if @pattern.blank.indexOf(c) >= 0
-            if ikeys.indexOf(aux[iau]) > -1
+            if ikeys.indexOf(aux[iau]) >= 0
               return 'Ainda não sei o que fazer com ' + aux[iau]
               iau += 1
               aux[iau] = ''
@@ -77,14 +81,40 @@ class LangEngine
           console.log state
           if c is @pattern.command[1]
             state = 3
+          else if @pattern.blank.indexOf(c) >= 0
+            state = 2
+          else if @pattern.num.indexOf(c) >= 0
+            aux[iau] += c
+            state = 7
           else
             return KC_FALSE
         when 5
           if c is @pattern.attrib[0]
             state = 6
+        when 7
+          if @pattern.num.indexOf(c) >= 0
+            aux[iau] += c
+          else if @pattern.blank.indexOf(c) >= 0
+            state = 8
+          else if c is @pattern.command[1]
+            state = 3
+          else
+            return KC_FALSE
+        when 8
+          if @pattern.blank.indexOf(c) >= 0
+            state = 8
+          else if c is @pattern.command[1]
+            state = 3
+          else
+            return KC_FALSE
       if state is 3
+        console.log aux
         if @api[aux[0]]
-          return @api[aux[0]].call()
+          if aux[1].length > 0
+            console.log "Chamando a função com parâmetro " + aux[1]
+            return @api[aux[0]].call(aux[1])
+          else
+            return @api[aux[0]].call()
         else
           console.log 'Comando não conhecido'
     return KC_FALSE
