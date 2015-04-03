@@ -111,7 +111,7 @@ class LangEngine
         console.log aux
         if @api[aux[0]]
           if aux[1].length > 0
-            console.log "Chamando a função com parâmetro " + aux[1]
+            console.log "Chamando a função " + @api[aux[0]] + "com parâmetro " + aux[1]
             return @api[aux[0]].call(aux[1])
           else
             return @api[aux[0]].call()

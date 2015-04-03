@@ -1,6 +1,3 @@
-# Copiado de novel, falta adaptar, criar os estilos, etc
-# Passo 2: criar classe editor, que será extendida para Cabin, MemEditor (editor para salvar comportamentos nos slots) e Puzzle
-
 # Cenas que utilizam a PowerArm.
 class PAScene extends Element
   constructor: (@id) ->

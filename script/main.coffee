@@ -39,12 +39,12 @@ cabine.addState 'images/snake-on.png'
 
 mapKeypress = (k) ->
   console.log "Apertou a tecla " + k.key
-  switch k.key
-    when "Up" then scene.move "kim", 0, -1, true
-    when "Down" then scene.move "kim", 0, 1, true
-    when "Left" then scene.move "kim", -1, 0, true
-    when "Right" then scene.move "kim", 1, 0, true
-    when "Esc" then cabine.run 'Snake', 'Jogo'
+  switch kk
+    when "ArrowUp" then scene.move "kim", 0, -1, true
+    when "ArrowDown" then scene.move "kim", 0, 1, true
+    when "ArrowLeft" then scene.move "kim", -1, 0, true
+    when "ArrowRight" then scene.move "kim", 1, 0, true
+    when "Escape" then cabine.run 'Snake', 'Jogo'
 
 $(document).ready ->
   scene.addEvent 6, 6, () ->
