@@ -119,7 +119,7 @@ class PuzzleScene extends PAScene
     @updateState()
     @input.focus()
   mapKeypress: (k) =>
-    if k.key in ['Esc']
+    if k.key in ['Esc', 'Escape']
       @actual += 1;
       if @actual < @states.length
         @updateState()
