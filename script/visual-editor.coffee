@@ -2,80 +2,42 @@
 class PAScene extends Element
   constructor: (@id) ->
     super @id
-    @msg_counter = 0
-    @engine = new LangEngine()
     @dom.addClass "cabin-session"
-    @shell = new Element(@id + "-cshell")
-    @shell.dom.addClass "cabin-shell"
-    @shell.hide()
-    @history = $ "<ul/>", {id: @id + "-cshistory"}
-    @history.addClass "cabin-shell-history"
-    @history.hide()
-    @input = $ "<input/>", {id: @id + "-csinput"}
-    @input.addClass "cabin-shell-input"
-    @input.hide()
-    @input.on 'keypress', (k) =>
-      if k.key is 'Enter'
-        @eval()
-    @help = new Element(@id + "-chelp")
-    @help.dom.addClass "cabin-help"
-    @help.hide()
-    @commarea = $ "<ul/>", {id: @id + "-ccomm"}
-    @commarea.addClass "cabin-comm"
+    @commarea = new Element(@id + "-ccomm")
+    @commarea.dom.addClass "cabin-comm"
     @commarea.hide()
     @arena = new Element(@id + "-carena")
     @arena.dom.addClass "cabin-arena"
     @arena.hide()
+    @panel = new Element(@id + "-cpanel")
+    @panel.dom.addClass "cabin-panel"
+    @panel.hide()
     @session = false
     @next = false
   activate: (mother) ->
     super mother
-    @shell.activate mother
-    mother.append @history
-    mother.append @input
-    @help.activate mother
-    mother.append @commarea
+    @commarea.activate mother
     @arena.activate mother
-    ea = @engine.getApi()
-    for f of ea
-      fl = $ "<li/>", {'class': "help-function"}
-      fl.append ea[f]
-      @commarea.append fl
+    @panel.activate mother
+    Blockly.inject $('#' + @id + '-ccomm')[0],
+      toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'
     @hide()
   echo: (msg) ->
-    li = $ '<li/>'
-    li.append msg
-    @history.append li
-    @history.scrollTop = @history.scrollTopMax
+    console.log 'Incompleto.'
   eval: () ->
-    @echo '# ' + @input.val()
-    exe = @engine.exec @input.val()
-    switch exe
-      when KC_FALSE
-        @echo "Comando desconhecido"
-      when KC_TRUE
-        console.log "Comando bem-sucedido"
-      else
-        @echo exe
-    @input.val ''
+    console.log 'Incompleto.'
   turnOn: () ->
     @show()
-    @shell.show()
-    @history.show()
-    @input.show()
-    @help.show()
     @commarea.show()
     @arena.show()
+    @panel.show()
   turnOff: () ->
-    @shell.hide()
-    @history.hide()
-    @input.hide()
-    @help.hide()
     @commarea.hide()
     @arena.hide()
+    @panel.hide()
     @hide()
   clear: () ->
-    @shell.val ''
+    console.log 'Incompleto.'
   run: (actual, next) ->
     @session = actual
     @next = next
@@ -97,13 +59,6 @@ class PuzzleScene extends PAScene
     super @id
     @states = []
     @actual = 0
-    @engine.addFunction "date", "Imprime a data atual", () =>
-      aux = new Date()
-      @echo aux.toGMTString()
-      return KC_TRUE
-    @engine.addFunction "double", "Dobra um número", (n) =>
-      @echo n
-      return KC_TRUE
   addState: (s) ->
     @states.push s
   setState: (i) ->
@@ -111,10 +66,7 @@ class PuzzleScene extends PAScene
   updateState: () ->
     @arena.dom.css 'background-image', "url(" + @states[@actual] + ")"
   run: (actual, next, st = 0) ->
-    super actual, next
-    @setState st
-    @updateState()
-    @input.focus()
+    console.log 'Incompleto.'
   mapKeypress: (k) =>
     if k.key in ['Esc']
       @actual += 1;

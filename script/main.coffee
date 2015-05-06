@@ -33,9 +33,11 @@ novel = new NovelScene "mainnovel"
 novel.addPerson "kim", heroPerson
 novel.addPerson "npc", npcPerson
 
-cabine = new PuzzleScene 'fase1'
+###cabine = new PuzzleScene 'fase1'
 cabine.addState 'images/snake-off.png'
-cabine.addState 'images/snake-on.png'
+cabine.addState 'images/snake-on.png'###
+
+cabine = new PAScene 'fase1'
 
 mapKeypress = (k) ->
   console.log "Apertou a tecla " + k.key

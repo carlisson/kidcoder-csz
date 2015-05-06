@@ -3,24 +3,62 @@
 <head>
   <meta charset="utf-8">
   <title>TableQuest</title>
+  <script src="script/blockly/acorn_interpreter.js"></script>
   <script src="script/blockly/blockly_compressed.js"></script>
   <script src="script/blockly/blocks_compressed.js"></script>
+  <script src="script/blockly/javascript_compressed.js"></script>
   <script src="script/blockly/msg/js/pt-br.js"></script>
+  <script src="script/blockly/block_test.js"></script>
+  <link rel="stylesheet" href="style/style.css">
+  <script src="script/zepto.js"></script>
+  <script src="script/fx.js"></script>
+  <script src="script/main.js"></script>
 </head>
 <body>
-<div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
-    <xml id="toolbox">
+    <a style="display: block; float: right;" onclick="roda()">Roda</a>
+<div id="blocklyDiv"><div id='console-display'></div></div>
+    <!--xml id="toolbox">
   <block type="controls_if"></block>
   <block type="controls_repeat_ext"></block>
   <block type="logic_compare"></block>
   <block type="math_number"></block>
   <block type="math_arithmetic"></block>
   <block type="text"></block>
-  <block type="text_print"></block>
-</xml>
+  <block type="stuff_date"></block>
+</xml-->
+  <div id="talk"></div>
+  <div id="area"></div>
+
     <script>
   Blockly.inject(document.getElementById('blocklyDiv'),
-      {toolbox: document.getElementById('toolbox')});
+      {toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'});
+
+
+        function initApi(interpreter, scope) {
+  // Add an API function for the alert() block.
+  var wrapper = function(text) {
+    text = text ? text.toString() : '';
+    return interpreter.createPrimitive(alert(text));
+  };
+  interpreter.setProperty(scope, 'alert',
+      interpreter.createNativeFunction(wrapper));
+
+  // Add an API function for the prompt() block.
+  wrapper = function(text) {
+    text = text ? text.toString() : '';
+    return interpreter.createPrimitive(prompt(text));
+  };
+  interpreter.setProperty(scope, 'prompt',
+      interpreter.createNativeFunction(wrapper));
+}
+
+    function roda() {
+        var code = Blockly.JavaScript.workspaceToCode();
+        var myInterpreter = new Interpreter(code, initApi);
+        myInterpreter.run();
+    }
+
+
 </script>
 </body>
 </html>

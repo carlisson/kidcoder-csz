@@ -39,3 +39,24 @@ class InternalKeyMonitor
   clear: () ->
     @stack = []
 keyMonitor = new InternalKeyMonitor()
+###
+initApi = (interpreter, scope) ->
+  # Add an API function for the alert() block.
+  wrapper = (text) ->
+    text = text if text.toString() else ''
+    return interpreter.createPrimitive alert text
+
+  interpreter.setProperty scope, 'alert', interpreter.createNativeFunction(wrapper)
+
+  # Add an API function for the prompt() block.
+  wrapper = (text) ->
+    text = text if text.toString() else ''
+    return interpreter.createPrimitive prompttext
+
+  interpreter.setProperty scope, 'prompt', interpreter.createNativeFunction(wrapper)
+
+run_code = () ->
+  code = Blockly.JavaScript.workspaceToCode()
+  myInterpreter = new Interpreter code, initApi
+  myInterpreter.run()
+###
