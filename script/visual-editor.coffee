@@ -1,17 +1,9 @@
 # Cenas que utilizam a PowerArm.
 class PAScene extends Element
   constructor: (@id) ->
-    super @id
-    @dom.addClass "cabin-session"
-    @commarea = new Element(@id + "-ccomm")
-    @commarea.dom.addClass "cabin-comm"
-    @commarea.hide()
-    @arena = new Element(@id + "-carena")
-    @arena.dom.addClass "cabin-arena"
-    @arena.hide()
-    @panel = new Element(@id + "-cpanel")
-    @panel.dom.addClass "cabin-panel"
-    @panel.hide()
+    @dom = $("#editor_area")
+    @arena = $("#console-display")
+    @panel = $("#console-panel")
     @session = false
     @next = false
   activate: (mother) ->
@@ -19,9 +11,6 @@ class PAScene extends Element
     @commarea.activate mother
     @arena.activate mother
     @panel.activate mother
-    Blockly.inject $('#' + @id + '-ccomm')[0],
-      toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'
-    @svg = $("#" + @id + "-ccomm .blocklySvg")[0]
     @hide()
   echo: (msg) ->
     console.log 'Incompleto.'

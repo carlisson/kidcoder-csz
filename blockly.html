@@ -15,8 +15,10 @@
   <script src="script/main.js"></script>
 </head>
 <body>
-    <a style="display: block; float: right;" onclick="roda()">Roda</a>
-<div id="blocklyDiv"><div id='console-display'></div></div>
+    <a style="display: block; float: right;" id="bshow">Mostrar</a>
+    <a style="display: block; float: right;" id="bhide">Esconder</a>
+    <a style="display: block; float: right;" id="bclear">Reiniciar</a>
+<div id='editor_area'><div id="blocklyDiv"></div><div id='console-display'></div><div id='console-panel'></div></div>
     <!--xml id="toolbox">
   <block type="controls_if"></block>
   <block type="controls_repeat_ext"></block>
@@ -51,12 +53,6 @@
   interpreter.setProperty(scope, 'prompt',
       interpreter.createNativeFunction(wrapper));
 }
-
-    function roda() {
-        var code = Blockly.JavaScript.workspaceToCode();
-        var myInterpreter = new Interpreter(code, initApi);
-        myInterpreter.run();
-    }
 
 
 </script>

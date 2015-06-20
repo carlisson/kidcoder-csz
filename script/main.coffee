@@ -1,3 +1,4 @@
+#testar snap/svg/raphael/paper interagindo com o blockly
 
 screenarea = [640, 420]
 # Tamanho da tela contado em quadrados
@@ -52,7 +53,31 @@ mapKeypress = (k) ->
   else if k.key in ['Esc', 'Escape']
     cabine.run 'Snake', 'Jogo'
 
+#  for i in $("#blocklyDiv")[0]
+#    document.write "<ul>" + i + "</ul>"
+
+###var code = Blockly.JavaScript.workspaceToCode();
+var myInterpreter = new Interpreter(code, initApi);
+myInterpreter.run();###
+###$("#blocklyDiv")[0].dom.animate({
+translate3d: '1000px,1000px,0'
+}, 500, 'linear')###
+
 $(document).ready ->
+  $("#bhide").on 'click', (e) ->
+    area = $("#editor_area")
+    x = -810
+    y = 0
+    area.animate({
+      translate3d: x + 'px,' + y + 'px,0'
+    }, 500, 'ease')
+  $("#bshow").on 'click', (e) ->
+    area = $("#editor_area")
+    x = 0
+    y = 0
+    area.animate({
+      translate3d: x + 'px,' + y + 'px,0'
+    }, 500, 'ease')
   scene.addEvent 6, 6, () ->
     novel.turnOn()
     novel.write "Chegou aqui."
