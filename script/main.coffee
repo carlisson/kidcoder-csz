@@ -52,6 +52,9 @@ mapKeypress = (k) ->
     scene.move "kim", 1, 0, true
   else if k.key in ESC
     cabine.run 'Snake', 'Jogo'
+  else if k.key in ['0']
+    cabine = new PAScene 'fase1'
+    cabine.activate $("#area")
 
 #  for i in $("#blocklyDiv")[0]
 #    document.write "<ul>" + i + "</ul>"

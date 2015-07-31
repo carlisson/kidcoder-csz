@@ -8,6 +8,7 @@ class PAScene extends Element
     @arena = new Element @id + '-display'
     @arena.dom.addClass 'code-display'
     @panel = new Element @id + '-panel'
+    @panel.dom.addClass 'code-panel'
     @toolbox =
       toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'
     @session = false
