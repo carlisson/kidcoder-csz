@@ -42,15 +42,15 @@ cabine = new PAScene 'fase1'
 
 mapKeypress = (k) ->
   console.log "Apertou a tecla " + k.key
-  if k.key in ['Up', 'ArrowUp']
+  if k.key in UP
     scene.move "kim", 0, -1, true
-  else if k.key in ['Down', 'ArrowDown']
+  else if k.key in DOWN
     scene.move "kim", 0, 1, true
-  else if k.key in ['Left', 'ArrowLeft']
+  else if k.key in LEFT
     scene.move "kim", -1, 0, true
-  else if k.key in ['Right', 'ArrowRight']
+  else if k.key in RIGHT
     scene.move "kim", 1, 0, true
-  else if k.key in ['Esc', 'Escape']
+  else if k.key in ESC
     cabine.run 'Snake', 'Jogo'
 
 #  for i in $("#blocklyDiv")[0]
@@ -64,12 +64,17 @@ translate3d: '1000px,1000px,0'
 }, 500, 'linear')###
 
 $(document).ready ->
+  ###
+  $("#bclear").on 'click', (e) ->
+    area = $("#editor_area")
+    Blockly.mainWorkspace.clear()
   $("#bhide").on 'click', (e) ->
     area = $("#editor_area")
     x = -810
     y = 0
     area.animate({
-      translate3d: x + 'px,' + y + 'px,0'
+      translate3d: x + 'px,' + y + 'px,0',
+      opacity: 0.0
     }, 500, 'ease')
   $("#bshow").on 'click', (e) ->
     area = $("#editor_area")
@@ -77,7 +82,15 @@ $(document).ready ->
     y = 0
     area.animate({
       translate3d: x + 'px,' + y + 'px,0'
+      opacity: 1.0
     }, 500, 'ease')
+  ###
+
+  tb =
+    toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'
+
+  #Blockly.inject $('#blocklyDiv')[0], tb
+
   scene.addEvent 6, 6, () ->
     novel.turnOn()
     novel.write "Chegou aqui."

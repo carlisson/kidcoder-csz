@@ -183,7 +183,8 @@
   background-color: #3B46DA;
 }
 
-#editor_area {
+#editor_area,
+.code-scene{
   position: absolute;
   z-index: 30;
   height: 600px;
@@ -193,13 +194,15 @@
   background-color: #f00;
 }
 
-#blocklyDiv {
+#blocklyDiv,
+.blockly{
   display: block;
     width: 800px;
     height: 600px;
 }
 
-#console-display {
+#console-display,
+.code-display{
   position: absolute;
   z-index: 31;
   background-color: black;

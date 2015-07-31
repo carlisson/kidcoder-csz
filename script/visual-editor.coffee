@@ -1,31 +1,43 @@
 # Cenas que utilizam a PowerArm.
 class PAScene extends Element
   constructor: (@id) ->
-    @dom = $("#editor_area")
-    @arena = $("#console-display")
-    @panel = $("#console-panel")
+    super @id
+    @dom.addClass "code-scene"
+    @blocks = new Element @id + '-blocks'
+    @blocks.dom.addClass 'blockly'
+    @arena = new Element @id + '-display'
+    @arena.dom.addClass 'code-display'
+    @panel = new Element @id + '-panel'
+    @toolbox =
+      toolbox: '<xml id="toolbox"><block type="controls_if"></block><block type="controls_repeat_ext"></block><block type="logic_compare"></block><block type="math_number"></block><block type="math_arithmetic"></block><block type="text"></block><block type="stuff_date"></block></xml>'
     @session = false
     @next = false
+  show: () ->
+    @dom.animate({
+      translate3d: '0px,0px,0'
+      opacity: 1.0
+    }, 500, 'ease')
+  hide: () ->
+    @dom.animate({
+      translate3d: '-810px,0px,0',
+      opacity: 0.0
+    }, 500, 'ease')
   activate: (mother) ->
     super mother
-    @commarea.activate mother
-    @arena.activate mother
-    @panel.activate mother
+    @blocks.activate @dom
+    @arena.activate @dom
+    @panel.activate @dom
+    console.log @toolbox
+    Blockly.inject @blocks.dom[0], @toolbox
+    console.log 'Após ativar blockly'
     @hide()
   echo: (msg) ->
     console.log 'Incompleto.'
   eval: () ->
     console.log 'Incompleto.'
   turnOn: () ->
-    console.log @svg
     @show()
-    @commarea.show()
-    @arena.show()
-    @panel.show()
   turnOff: () ->
-    @commarea.hide()
-    @arena.hide()
-    @panel.hide()
     @hide()
   clear: () ->
     console.log 'Incompleto.'
@@ -35,7 +47,7 @@ class PAScene extends Element
     @turnOn()
     keyMonitor.pushState @mapKeypress
   mapKeypress: (k) =>
-    if k.key in ['Esc']
+    if k.key in ESC
       console.log 'Sai'
       keyMonitor.popState()
       @turnOff()
@@ -59,7 +71,7 @@ class PuzzleScene extends PAScene
   run: (actual, next, st = 0) ->
     console.log 'Incompleto.'
   mapKeypress: (k) =>
-    if k.key in ['Esc']
+    if k.key in ESC
       @actual += 1;
       if @actual < @states.length
         @updateState()

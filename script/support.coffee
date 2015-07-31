@@ -2,6 +2,11 @@
 
 KC_TRUE = "ByewgEp6"
 KC_FALSE = "syg3Glyrecs"
+ESC = ['Esc', 'Escape']
+UP = ['Up', 'ArrowUp']
+DOWN = ['Down', 'ArrowDown']
+LEFT = ['Left', 'ArrowLeft']
+RIGHT = ['Right', 'ArrowRight']
 
 # Elemento gráfico do jogo
 class Element
