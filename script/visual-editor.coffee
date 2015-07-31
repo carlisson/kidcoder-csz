@@ -29,22 +29,19 @@ class PAScene extends Element
     @arena.activate @dom
     @panel.activate @dom
     console.log @toolbox
-    Blockly.inject @blocks.dom[0], @toolbox
+    @blockspace = Blockly.inject @blocks.dom[0], @toolbox
     console.log 'Após ativar blockly'
     @hide()
   echo: (msg) ->
     console.log 'Incompleto.'
   eval: () ->
-    console.log 'Incompleto.'
+    code = Blockly.JavaScript.workspaceToCode @blockspace
+    console.log code
   turnOn: () ->
     @show()
   turnOff: () ->
     @hide()
-  clear: () ->
-    console.log 'Incompleto.'
-  run: (actual, next) ->
-    @session = actual
-    @next = next
+  run: () ->
     @turnOn()
     keyMonitor.pushState @mapKeypress
   mapKeypress: (k) =>
@@ -53,6 +50,8 @@ class PAScene extends Element
       keyMonitor.popState()
       @turnOff()
       @session = @next
+    else if k.key in '9'
+      @eval()
     else
       console.log 'Espera'
 
