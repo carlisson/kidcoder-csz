@@ -36,7 +36,7 @@ class PAScene extends Element
     console.log 'Incompleto.'
   eval: () ->
     code = Blockly.JavaScript.workspaceToCode @blockspace
-    console.log code
+    eval(code)
   turnOn: () ->
     @show()
   turnOff: () ->

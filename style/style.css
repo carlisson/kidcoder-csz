@@ -186,6 +186,7 @@
 #editor_area,
 .code-scene{
   position: absolute;
+  opacity: 0.0;
   z-index: 30;
   height: 600px;
   width: 800px;
